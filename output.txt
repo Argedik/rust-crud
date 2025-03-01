@@ -1,0 +1,264 @@
+Dosya Yolu: besin-uygulamasi/Dockerfile
+Dosya İçeriği:
+# 1. Aşama: Derleme
+FROM rust:1.85 AS builder
+
+WORKDIR /app
+# Proje dosyalarını kopyala
+COPY . .
+
+# Release modda derleme
+RUN cargo build --release
+
+# 2. Aşama: Daha ufak bir tabanda sadece ikili dosyaları kullan
+FROM debian:bullseye-slim AS runtime
+
+WORKDIR /app
+# Builder aşamasında oluşan binary dosyaları kopyala
+COPY --from=builder /app/target/release/create /app/create
+COPY --from=builder /app/target/release/read   /app/read
+COPY --from=builder /app/target/release/update /app/update
+COPY --from=builder /app/target/release/delete /app/delete
+
+# Veritabanı dosyamız (çalışma anında da yaratılabilir)
+# COPY database.json /app/database.json   # İsterseniz, eğer bir başlangıç verisi gerekiyorsa
+
+# Varsayılan olarak "create" komutunu çalıştırmak isterseniz:
+CMD ["/app/create"]
+
+
+Dosya Yolu: besin-uygulamasi/.env.example
+Dosya İçeriği:
+# PostgreSQL Veritabanı Bağlantı Bilgileri (Örnek)
+DATABASE_URL=postgres://username:password@yourdomain.com:5432/dbname
+
+# Uygulama Modu
+APP_ENV=production
+
+# PostgreSQL Kullanıcı Bilgileri (Eğer gerekiyorsa)
+POSTGRES_USER=username
+POSTGRES_PASSWORD=password
+POSTGRES_DB=dbname
+
+# Servislerin Çalışacağı Portlar (Opsiyonel)
+APP_PORT=8080
+
+
+Dosya Yolu: besin-uygulamasi/src/lib.rs
+Dosya İçeriği:
+use serde::{Serialize, Deserialize};
+use std::fs::{OpenOptions, File};
+use std::io::{BufReader, BufWriter};
+use std::path::Path;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Item {
+    pub id: u32,
+    pub name: String,
+    pub description: String,
+}
+
+// JSON dosyası adı
+const DB_FILE: &str = "database.json";
+
+/// JSON dosyasını oku ve `Vec<Item>` döndür.
+/// Dosya yoksa boş bir vektör döndür.
+pub fn read_db() -> Result<Vec<Item>, Box<dyn std::error::Error>> {
+    if !Path::new(DB_FILE).exists() {
+        return Ok(vec![]);
+    }
+    let file = File::open(DB_FILE)?;
+    let reader = BufReader::new(file);
+    let items = serde_json::from_reader(reader)?;
+    Ok(items)
+}
+
+/// Mevcut `Vec<Item>` verisini JSON dosyasına yaz.
+pub fn write_db(items: &Vec<Item>) -> Result<(), Box<dyn std::error::Error>> {
+    let file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(DB_FILE)?;
+    let writer = BufWriter::new(file);
+    serde_json::to_writer_pretty(writer, items)?;
+    Ok(())
+}
+
+
+Dosya Yolu: besin-uygulamasi/src/bin/create.rs
+Dosya İçeriği:
+use tokio_postgres::NoTls;
+use rust_crud_project::config::Config;  // <-- crate adın bu!
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Ortam değişkenini yükle
+    let config = Config::from_env();
+
+    // PostgreSQL bağlantısı
+    let (client, connection) = tokio_postgres::connect(&config.database_url, NoTls).await?;
+
+    // Arka planda bağlantı yönetimi
+    tokio::spawn(async move {
+        if let Err(e) = connection.await {
+            eprintln!("Bağlantı hatası: {}", e);
+        }
+    });
+
+    // Örnek kayıt ekleyelim (CREATE)
+    let name = "Deneme Ürün";
+    let description = "Bu bir açıklamadır.";
+    client.execute(
+        "INSERT INTO items (name, description) VALUES ($1, $2)",
+        &[&name, &description],
+    ).await?;
+
+    println!("✅ Kayıt eklendi!");
+
+    Ok(())
+}
+
+
+Dosya Yolu: besin-uygulamasi/src/bin/delete.rs
+Dosya İçeriği:
+use tokio_postgres::NoTls;
+use rust_crud_project::config::Config;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config::from_env();
+    let (client, connection) = tokio_postgres::connect(&config.database_url, NoTls).await?;
+
+    tokio::spawn(async move {
+        if let Err(e) = connection.await {
+            eprintln!("Bağlantı hatası: {}", e);
+        }
+    });
+
+    // Örnek: ID = 1 olan kaydı sil
+    let delete_id = 1;
+
+    let rows_affected = client.execute(
+        "DELETE FROM items WHERE id = $1",
+        &[&delete_id]
+    ).await?;
+
+    if rows_affected == 0 {
+        println!("ID {} için kayıt bulunamadı.", delete_id);
+    } else {
+        println!("ID {} başarıyla silindi.", delete_id);
+    }
+
+    Ok(())
+}
+
+
+Dosya Yolu: besin-uygulamasi/src/bin/read.rs
+Dosya İçeriği:
+use tokio_postgres::NoTls;
+use rust_crud_project::config::Config;  
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config::from_env();
+    let (client, connection) = tokio_postgres::connect(&config.database_url, NoTls).await?;
+
+    tokio::spawn(async move {
+        if let Err(e) = connection.await {
+            eprintln!("Bağlantı hatası: {}", e);
+        }
+    });
+
+    // items tablosundaki kayıtları okuyalım
+    let rows = client.query("SELECT id, name, description FROM items", &[]).await?;
+
+    if rows.is_empty() {
+        println!("Hiç kayıt yok.");
+    } else {
+        for row in rows {
+            let id: i32 = row.get("id");
+            let name: String = row.get("name");
+            let desc: String = row.get("description");
+            println!("ID: {}, Name: {}, Description: {}", id, name, desc);
+        }
+    }
+
+    Ok(())
+}
+
+
+Dosya Yolu: besin-uygulamasi/src/bin/update.rs
+Dosya İçeriği:
+use tokio_postgres::NoTls;
+use rust_crud_project::config::Config;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config::from_env();
+    let (client, connection) = tokio_postgres::connect(&config.database_url, NoTls).await?;
+
+    tokio::spawn(async move {
+        if let Err(e) = connection.await {
+            eprintln!("Bağlantı hatası: {}", e);
+        }
+    });
+
+    // Örnek: ID = 1 olan kaydı güncelle
+    let update_id = 1;
+    let new_name = "Güncellenmiş Ürün";
+    let new_desc = "Yeni açıklama";
+
+    let rows_affected = client.execute(
+        "UPDATE items SET name = $1, description = $2 WHERE id = $3",
+        &[&new_name, &new_desc, &update_id]
+    ).await?;
+
+    if rows_affected == 0 {
+        println!("ID {} için kayıt bulunamadı.", update_id);
+    } else {
+        println!("ID {} için güncelleme başarılı!", update_id);
+    }
+
+    Ok(())
+}
+
+
+Dosya Yolu: besin-uygulamasi/src/config.rs
+Dosya İçeriği:
+use std::env;
+use dotenv::dotenv;
+
+pub struct Config {
+    pub database_url: String,
+}
+
+impl Config {
+    pub fn from_env() -> Self {
+        dotenv().ok(); 
+
+        let database_url = env::var("DATABASE_URL")
+            .expect("DATABASE_URL environment variable must be set!");
+
+        Config {
+            database_url
+        }
+    }
+}
+
+
+Dosya Yolu: besin-uygulamasi/Cargo.toml
+Dosya İçeriği:
+[package]
+name = "rust_crud_project"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+tokio-postgres = "0.7"
+dotenv = "0.15"
+
+

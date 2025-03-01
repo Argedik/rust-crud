@@ -1,0 +1,12 @@
+/home/argedik/Desktop/fe/crud/target/debug/deps/libasync_trait-7a22fc6978b8b9c3.so: /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/lib.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/args.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/bound.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/expand.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/lifetime.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/parse.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/receiver.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/verbatim.rs
+
+/home/argedik/Desktop/fe/crud/target/debug/deps/async_trait-7a22fc6978b8b9c3.d: /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/lib.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/args.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/bound.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/expand.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/lifetime.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/parse.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/receiver.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/verbatim.rs
+
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/lib.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/args.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/bound.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/expand.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/lifetime.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/parse.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/receiver.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.86/src/verbatim.rs:

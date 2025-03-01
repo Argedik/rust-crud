@@ -1,0 +1,11 @@
+/home/argedik/Desktop/fe/crud/target/debug/deps/libpostgres_types-4ae72e18c017cea5.rmeta: /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/lib.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/pg_lsn.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/private.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/special.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/type_gen.rs
+
+/home/argedik/Desktop/fe/crud/target/debug/deps/libpostgres_types-4ae72e18c017cea5.rlib: /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/lib.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/pg_lsn.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/private.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/special.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/type_gen.rs
+
+/home/argedik/Desktop/fe/crud/target/debug/deps/postgres_types-4ae72e18c017cea5.d: /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/lib.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/pg_lsn.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/private.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/special.rs /home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/type_gen.rs
+
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/lib.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/pg_lsn.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/private.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/special.rs:
+/home/argedik/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/postgres-types-0.2.9/src/type_gen.rs:
